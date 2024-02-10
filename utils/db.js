@@ -1,29 +1,36 @@
 import { MongoClient } from "mongodb";
 
+const URL =
+  `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}` ||
+  "mongodb://localhost:27017";
+const DB = process.env.DB_DATABASE || "files_manager";
+
 class DBClient {
   constructor() {
-    const URL = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}` || 'mongodb://localhost:27017';
-    const DB = process.env.DB_DATABASE || 'files_manager';
-    const client = new MongoClient(URL);
-    client.connect();
-    this.dbClient = client.db(DB);
+    MongoClient.connect(URL, { useUnifiedTopology: true }, (err, client) => {
+      if (err) {
+        console.error(err);
+        this.db = false;
+      } else {
+        this.db = client.db(DB);
+        this.usersCollection = this.db.collection("users");
+        this.filesCollection = this.db.collection("files");
+      }
+    });
   }
 
   isAlive() {
-    return this.dbClient.isConnected();
+    return Boolean(this.db);
   }
 
   async nbUsers() {
-    const users = this.dbClient.collection('users').find();
-    return users.length();
+    return this.usersCollection.countDocuments();
   }
 
   async nbFiles() {
-    const files = this.dbClient.collection('files').find();
-    return files.length();
+    return this.filesCollection.countDocuments();
   }
 }
-
 
 const dbClient = new DBClient();
 
