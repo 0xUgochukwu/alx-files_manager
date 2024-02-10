@@ -1,8 +1,8 @@
 import { MongoClient } from "mongodb";
 
-const URL =
-  `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}` ||
-  "mongodb://localhost:27017";
+const HOST = process.env.DB_HOST || "localhost";
+const PORT = process.env.DB_PORT || "27017";
+const URL = `mongodb://${HOST}:${PORT}`;
 const DB = process.env.DB_DATABASE || "files_manager";
 
 class DBClient {
