@@ -1,24 +1,22 @@
-import dbClient from './utils/db';
+import dbClient from "./utils/db";
 
 const waitConnection = () => {
     return new Promise((resolve, reject) => {
         let i = 0;
         const repeatFct = async () => {
-            await setTimeout(() => {
+            setTimeout(() => {
                 i += 1;
                 if (i >= 10) {
-                    reject()
-                }
-                else if (!dbClient.isAlive()) {
-                    repeatFct()
-                }
-                else {
-                    resolve()
+                    reject(new Error("Connection attempt timed out"));
+                } else if (!dbClient.isAlive()) {
+                    repeatFct();
+                } else {
+                    resolve();
                 }
             }, 1000);
         };
         repeatFct();
-    })
+    });
 };
 
 (async () => {
