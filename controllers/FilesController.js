@@ -10,9 +10,15 @@ export default class FilesController{
         const userId = await redisClient.get(`auth_${token}`)
 	const file = await dbClient.findFile(_id)
 	if(file && userId) {
-		if (userId === file.userId) { 
-	            response.
-		}
+                     const ID = new ObjectId(userId)
+	             const user = await dbClient.findUser(ID)
+	            if (!user) {
+			    response.status(401).json({"error": "Unauthorized" })
+		    } else if( userId === file.userId) {
+			    response.status(200).json(file)
+		    } else {
+			    response.status(404).json({'error': 'Not found'})
+		    }
 	}
     }
     static async getIndex(request, response) {}
