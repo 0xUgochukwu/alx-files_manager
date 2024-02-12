@@ -28,7 +28,7 @@ export default class AuthController {
   }
 
   static async getDisconnect(request, response) {
-    const token = request.headers['x-token'];
+    const token = request.headers['X-Token'];
     const id = await redisClient.get(`auth_${token}`);
     if (id) {
       const _id = new ObjectId(id);
