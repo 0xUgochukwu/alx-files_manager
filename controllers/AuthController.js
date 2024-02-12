@@ -18,7 +18,7 @@ export default class AuthController {
         if (password === user.password) {
           const token = v4();
           const key = `auth_${token}`;
-          await redisClient.set(key, user._id.toString(), (24 * 3600));
+          await redisClient.set(key, user._id.toString(), (24 * 60 * 60));
           response.status(200).send({ token });
         }
       } else {
