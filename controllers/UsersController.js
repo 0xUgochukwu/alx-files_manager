@@ -1,4 +1,6 @@
 import dbClient from '../utils/db';
+import redisClient from '../utils/redis'
+import { ObjectId } from 'mongodb'
 
 export default class UsersController {
   static async postNew(request, response) {
@@ -17,5 +19,20 @@ export default class UsersController {
 
     user = await dbClient.createUser(email, password);
     return response.status(201).send({ email: user.email, id: user._id.toString() });
+  }
+  
+  static async getMe(request, response) {
+       const token = request.headers['x-token']
+       const id = await redisClient.get(`auth_${token}`)
+       if( id !== null) {
+          const _id = new ObjectId(id)
+          const user = await dbClient.findUser( _id )
+	   console.log(id)
+	  if (user) {
+	     response.status(200).send({"id": user._id, "email": user.email });
+          } else {
+		  response.status(401).send({'error': 'Unauthorize'})
+       }
+  }
   }
 }
