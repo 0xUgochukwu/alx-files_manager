@@ -33,7 +33,7 @@ class DBClient {
   }
 
   async findUser(email) {
-    return this.usersCollection.findOne({email});
+    return this.usersCollection.findOne(email);
   }
 
   async createUser(email, password) {
