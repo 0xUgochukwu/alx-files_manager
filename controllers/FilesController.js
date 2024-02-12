@@ -11,7 +11,7 @@ export default class FilesController{
 	const file = await dbClient.findFile(_id)
 	if(file && userId) {
 		if (userId === file.userId) { 
-	            response.
+	            response.send(file)
 		}
 	}
     }
