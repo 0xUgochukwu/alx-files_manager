@@ -19,12 +19,11 @@ export default class AuthController {
           const token = v4();
           const key = `auth_${token}`;
           await redisClient.set(key, user._id.toString(), (24 * 60 * 60));
-          response.status(200).send({ token });
+          return response.status(200).send({ token });
         }
-      } else {
-        response.status(401).send({ error: 'Unauthorized' });
       }
     }
+    return response.status(401).send({ error: 'Unauthorized' });
   }
 
   static async getDisconnect(request, response) {
@@ -35,10 +34,9 @@ export default class AuthController {
       const user = await dbClient.findUser(_id);
       if (user) {
         await redisClient.del(`auth_${token}`);
-        response.status(204).send();
+        return response.status(204).send();
       }
-    } else {
-      response.status(401).send({ error: 'Unauthorized' });
     }
+    return response.status(401).send({ error: 'Unauthorized' });
   }
 }
