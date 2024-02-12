@@ -27,7 +27,6 @@ export default class UsersController {
        if( id !== null) {
           const _id = new ObjectId(id)
           const user = await dbClient.findUser( _id )
-	   console.log(id)
 	  if (user) {
 	     response.status(200).send({"id": user._id, "email": user.email });
           } else {
