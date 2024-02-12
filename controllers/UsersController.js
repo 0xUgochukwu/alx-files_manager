@@ -30,10 +30,11 @@ export default class UsersController {
 	  if (user) {
 	     response.status(200).send({"id": user._id, "email": user.email });
           } else {
-		  response.status(401).send({'error': 'Unauthorized'})
+	       response.status(401).send({'error': 'Unauthorized'})
+	  }
        } else {
              response.status(401).send({'error': 'Unauthorized'})
        }
-  }
+  
   }
 }
