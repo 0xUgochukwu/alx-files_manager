@@ -35,7 +35,8 @@ class DBClient {
   async findUser(email) {
     return this.usersCollection.findOne(email);
   }
-    async findFile(item) {
+
+  async findFile(item) {
     return this.filesCollection.findOne(item);
   }
 
