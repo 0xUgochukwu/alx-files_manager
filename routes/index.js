@@ -1,6 +1,7 @@
 import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
+import FilesController from '../controllers/FilesController'
 
 export default function routes(app) {
   app.get('/status', (req, res) => {
@@ -10,8 +11,6 @@ export default function routes(app) {
     AppController.getStats(req, res);
   });
   app.get('/connect', (req, res) => {
-     
-    //console.log(req.headers['authorization'].split(" "))
     AuthController.getConnect(req, res)
   })
   app.get('/disconnect', (req, res) => {
@@ -19,6 +18,12 @@ export default function routes(app) {
   })
   app.get('/users/me', (req, res) => {
     UsersController.getMe(req, res)
+  })
+  app.get('/files/:id', (req, res) => {
+    FilesController.getShow(req, res)
+  })
+  app.get('/files', (req, res) => {
+    FilesController.getIndex(req, res)
   })
   app.post('/users', (req, res) => {
     UsersController.postNew(req, res);

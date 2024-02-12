@@ -12,7 +12,7 @@ export default class AuthController {
            const base64Decode = Buffer.from(userCredential, 'base64').toString('binary')
            const email = base64Decode.split(':')[0]
            const password = sha1(base64Decode.split(':')[1])
-           let user = await dbClient.findUser(email)
+           let user = await dbClient.findUser({email})
 	   console.log(user)
 	   if(user) {
                if(password === user.password){
