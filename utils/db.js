@@ -1,9 +1,9 @@
-import { MongoClient } from "mongodb";
+import { MongoClient } from 'mongodb';
 
-const HOST = process.env.DB_HOST || "localhost";
-const PORT = process.env.DB_PORT || "27017";
+const HOST = process.env.DB_HOST || 'localhost';
+const PORT = process.env.DB_PORT || '27017';
 const URL = `mongodb://${HOST}:${PORT}`;
-const DB = process.env.DB_DATABASE || "files_manager";
+const DB = process.env.DB_DATABASE || 'files_manager';
 
 class DBClient {
   constructor() {
@@ -13,8 +13,8 @@ class DBClient {
         this.db = false;
       } else {
         this.db = client.db(DB);
-        this.usersCollection = this.db.collection("users");
-        this.filesCollection = this.db.collection("files");
+        this.usersCollection = this.db.collection('users');
+        this.filesCollection = this.db.collection('files');
       }
     });
   }
