@@ -1,7 +1,8 @@
-import dbClient from '../utils/db'
-import redisClient from '../utils/redis'
-import { ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb';
+import dbClient from '../utils/db';
+import redisClient from '../utils/redis';
 
+<<<<<<< HEAD
 export default class FilesController{
     static async getShow(request, response) {
         const id = request.params['id']
@@ -21,5 +22,4 @@ export default class FilesController{
 		    }
 	}
     }
-    static async getIndex(request, response) {}
-}
+  }
