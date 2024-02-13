@@ -73,6 +73,36 @@ export default class FilesController {
     }
   }
 
+  static async getIndex(request, response) {
+    const parentId = request.query.parentId || 0;
+    const page = Number(request.query.page) || 0;
+    const limit = Number(request.query.limit) || 20;
+    const userId = request.user._id.toString();
+    const skip = (page) * limit;
+
+    if (request.user) {
+      const query = parentId === 0 ? { userId } : { userId, parentId };
+
+      const temp = await dbClient.findFiles(query, skip, limit);
+      if (temp) {
+        const files = [];
+        temp.forEach((doc) => {
+          const file = {
+            id: doc._id.toString(),
+            userId: doc.userId,
+            name: doc.name,
+            type: doc.type,
+            isPublic: doc.isPublic,
+            parentId: doc.parentId,
+          };
+          files.push(file);
+        });
+        return response.status(200).json(files);
+      }
+    }
+    return response.status(401).json({ error: 'Unauthorized' });
+  }
+
   static async putPublish(request, response) {
     const _id = new ObjectId(request.params.id);
     const file = await dbClient.findFile(_id);
