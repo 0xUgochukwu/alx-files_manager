@@ -32,7 +32,7 @@ export default function routes(app) {
   app.put('/files/:id/unpublish', getUserFromToken, (req, res) => {
     FilesController.putUnpublish(req, res);
   });
-  app.get('/files', getUserFromToken, (req, res) => {
+  app.get('/files', (req, res) => {
     FilesController.getIndex(req, res);
   });
   app.post('/users', (req, res) => {

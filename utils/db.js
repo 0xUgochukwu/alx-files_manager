@@ -40,10 +40,6 @@ class DBClient {
     return this.filesCollection.findOne(query);
   }
 
-  async findFiles(query, skip, limit) {
-    return this.filesCollection.aggregate([{ $match: query }]).skip(skip).limit(limit).toArray();
-  }
-
   async createUser(email, password) {
     const user = {
       email,
