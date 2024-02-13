@@ -1,6 +1,5 @@
 import sha1 from 'sha1';
 import { v4 } from 'uuid';
-import { ObjectId } from 'mongodb';
 import redisClient from '../utils/redis';
 import dbClient from '../utils/db';
 
@@ -10,8 +9,9 @@ export default class AuthController {
     if (Auth.length === 2 && Auth[0] === 'Basic') {
       const userCredential = Auth[1];
       const base64Decode = Buffer.from(userCredential, 'base64').toString('binary');
-      const email = base64Decode.split(':')[0];
-      const password = sha1(base64Decode.split(':')[1]);
+      const sepPos = base64Decode.indexOf(':');
+      const email = base64Decode.substring(0, sepPos);
+      const password = sha1(base64Decode.substring(sepPos + 1));
       const user = await dbClient.findUser({ email });
 
       if (user) {
