@@ -41,7 +41,8 @@ class DBClient {
   }
 
   async findFiles(query, skip, limit) {
-    return this.filesCollection.aggregate([{ $match: query }]).skip(skip).limit(limit).toArray();
+    const piplines = [{ $match: query }, { $skip: skip }, { $limit: limit }]
+    return this.filesCollection.aggregate(piplines).toArray();
   }
 
   async createUser(email, password) {

@@ -80,27 +80,25 @@ export default class FilesController {
     const userId = request.user._id.toString();
     const skip = (page) * limit;
 
-    if (request.user) {
-      const query = parentId === 0 ? { userId } : { userId, parentId };
+    if (!request.user) { return response.status(401).json({ error: 'Unauthorized' }); }
+    const query = parentId === 0 ? { userId } : { userId, parentId };
 
-      const temp = await dbClient.findFiles(query, skip, limit);
-      if (temp) {
-        const files = [];
-        temp.forEach((doc) => {
-          const file = {
-            id: doc._id.toString(),
-            userId: doc.userId,
-            name: doc.name,
-            type: doc.type,
-            isPublic: doc.isPublic,
-            parentId: doc.parentId,
-          };
-          files.push(file);
-        });
-        return response.status(200).json(files);
-      }
+    const temp = await dbClient.findFiles(query, skip, limit);
+    const files = [];
+    if (temp) {
+      temp.forEach((doc) => {
+        const file = {
+          id: doc._id.toString(),
+          userId: doc.userId,
+          name: doc.name,
+          type: doc.type,
+          isPublic: doc.isPublic,
+          parentId: doc.parentId,
+        };
+        files.push(file);
+      });
     }
-    return response.status(401).json({ error: 'Unauthorized' });
+    return response.status(200).json(files);
   }
 
   static async putPublish(request, response) {
