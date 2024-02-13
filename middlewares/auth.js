@@ -11,13 +11,11 @@ async function getUserFromToken(request, response, next) {
     const user = await dbClient.findUser(_id);
     if (user) {
       request.user = user;
-      next();
-    } else {
-      return response.status(401).send({ error: 'Unauthorized' })
-    };
-  } else {
-    return response.status(401).send({ error: 'Unauthorized' })
-  };
+      return next();
+    }
+    return response.status(401).send({ error: 'Unauthorized' });
+  }
+  return response.status(401).send({ error: 'Unauthorized' });
 }
 
 export default getUserFromToken;

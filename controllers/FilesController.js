@@ -8,20 +8,26 @@ import redisClient from '../utils/redis';
 const VALID_TYPES = ['folder', 'file', 'image'];
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
 
+if (!fs.existsSync(FOLDER_PATH)) {
+  fs.mkdirSync(FOLDER_PATH);
+}
+
 export default class FilesController {
   static async postUpload(request, response) {
-    const { name, type, parentId, isPublic, data } = request.body;
+    const {
+      name, type, parentId, isPublic, data,
+    } = request.body;
     if (!name) {
       return response.status(400).send({ error: 'Missing name' });
     }
     if (!type || !VALID_TYPES.includes(type)) {
       return response.status(400).send({ error: 'Missing type' });
     }
-    if (!data && type != 'folder') {
+    if (!data && type !== 'folder') {
       return response.status(400).send({ error: 'Missing data' });
     }
     if (parentId) {
-      const parent = await dbClient.findFile({ _id: parentId });
+      const parent = await dbClient.findFile({ _id: new ObjectId(parentId) });
       if (!parent) {
         return response.status(400).send({ error: 'Parent not found' });
       }
@@ -47,7 +53,14 @@ export default class FilesController {
       newFile = await dbClient.createFile({ ...newFile, localPath });
     }
 
-    return response.status(201).send(newFile);
+    return response.status(201).send({
+      id: newFile._id.toString(),
+      userId: newFile.userId,
+      name: newFile.name,
+      type: newFile.type,
+      isPublic: newFile.isPublic,
+      parentId: newFile.parentId,
+    });
   }
 
   static async getShow(request, response) {
