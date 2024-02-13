@@ -12,10 +12,12 @@ async function getUserFromToken(request, response, next) {
     if (user) {
       request.user = user;
       next();
-    }
-    return response.status(401).send({ error: 'Unauthorized' });
-  }
-  return response.status(401).send({ error: 'Unauthorized' });
+    } else {
+      return response.status(401).send({ error: 'Unauthorized' })
+    };
+  } else {
+    return response.status(401).send({ error: 'Unauthorized' })
+  };
 }
 
 export default getUserFromToken;
