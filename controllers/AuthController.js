@@ -7,7 +7,7 @@ import dbClient from '../utils/db';
 export default class AuthController {
   static async getConnect(request, response) {
     const Auth = request.headers.authorization.split(' ');
-    if (Auth.length === 2) {
+    if (Auth.length === 2 && Auth[0] === 'Basic') {
       const userCredential = Auth[1];
       const base64Decode = Buffer.from(userCredential, 'base64').toString('binary');
       const email = base64Decode.split(':')[0];
