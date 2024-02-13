@@ -2,6 +2,7 @@ import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import FilesController from '../controllers/FilesController';
+import { getUserFromToken } from '../middlewares/auth';
 
 export default function routes(app) {
   app.get('/status', (req, res) => {
@@ -13,10 +14,10 @@ export default function routes(app) {
   app.get('/connect', (req, res) => {
     AuthController.getConnect(req, res);
   });
-  app.get('/disconnect', (req, res) => {
+  app.get('/disconnect', getUserFromToken, (req, res) => {
     AuthController.getDisconnect(req, res);
   });
-  app.get('/users/me', (req, res) => {
+  app.get('/users/me', getUserFromToken, (req, res) => {
     UsersController.getMe(req, res);
   });
   app.get('/files/:id', (req, res) => {

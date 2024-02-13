@@ -22,18 +22,9 @@ export default class UsersController {
   }
 
   static async getMe(request, response) {
-    const token = request.headers['x-token'];
-    const id = await redisClient.get(`auth_${token}`);
-    if (id !== null) {
-      const _id = new ObjectId(id);
-      const user = await dbClient.findUser(_id);
-      if (user) {
-        response.status(200).send({ email: user.email, id: user._id.toString() });
-      } else {
-        response.status(401).send({ error: 'Unauthorized' });
-      }
-    } else {
-      response.status(401).send({ error: 'Unauthorized' });
-    }
+    response.status(200).send({
+      email: request.user.email,
+      id: request.user._id.toString()
+    });
   }
 }
