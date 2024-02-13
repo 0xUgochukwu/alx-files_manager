@@ -1,7 +1,9 @@
-import dbClient from "../utils/db";
-import redisClient from "../utils/redis";
+import { ObjectId } from 'mongodb';
 
-export async function getUserFromToken(request, response, next) {
+import dbClient from '../utils/db';
+import redisClient from '../utils/redis';
+
+async function getUserFromToken(request, response, next) {
   const token = request.headers['x-token'];
   const id = await redisClient.get(`auth_${token}`);
   if (id) {
@@ -15,3 +17,5 @@ export async function getUserFromToken(request, response, next) {
   }
   return response.status(401).send({ error: 'Unauthorized' });
 }
+
+module.exports = { getUserFromToken };
