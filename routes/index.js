@@ -2,7 +2,7 @@ import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import FilesController from '../controllers/FilesController';
-import { getUserFromToken } from '../middlewares/auth';
+import getUserFromToken from '../middlewares/auth';
 
 export default function routes(app) {
   app.get('/status', (req, res) => {

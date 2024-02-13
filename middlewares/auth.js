@@ -18,4 +18,4 @@ async function getUserFromToken(request, response, next) {
   return response.status(401).send({ error: 'Unauthorized' });
 }
 
-module.exports = { getUserFromToken };
+export default getUserFromToken;
