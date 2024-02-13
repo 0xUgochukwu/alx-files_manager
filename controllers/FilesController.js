@@ -75,9 +75,44 @@ export default class FilesController {
   }
 
   static async putPublish(request, response) {
-    const { id } = request.params;
+    const _id = new ObjectId(request.params.id);
+    const file = await dbClient.findFile(_id);
 
+    if (!file || request.user._id !== file.userId) {
+      return response.status(404).send({ error: 'Not found' });
+    }
 
+    const updatedFile = await dbClient.updateFile({ _id }, { isPublic: true });
+
+    return response.status(200).send({
+      id: updatedFile._id.toString(),
+      userId: updatedFile.userId,
+      name: updatedFile.name,
+      type: updatedFile.type,
+      isPublic: updatedFile.isPublic,
+      parentId: updatedFile.parentId,
+    });
+
+  }
+
+  static async putUnpublish(request, response) {
+    const _id = new ObjectId(request.params.id);
+    const file = await dbClient.findFile(_id);
+
+    if (!file || request.user._id !== file.userId) {
+      return response.status(404).send({ error: 'Not found' });
+    }
+
+    const updatedFile = await dbClient.updateFile({ _id }, { isPublic: false });
+
+    return response.status(200).send({
+      id: updatedFile._id.toString(),
+      userId: updatedFile.userId,
+      name: updatedFile.name,
+      type: updatedFile.type,
+      isPublic: updatedFile.isPublic,
+      parentId: updatedFile.parentId,
+    });
 
   }
 }

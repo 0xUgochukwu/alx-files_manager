@@ -26,6 +26,12 @@ export default function routes(app) {
   app.get('/files/:id', (req, res) => {
     FilesController.getShow(req, res);
   });
+  app.put('files/:id/publish', getUserFromToken, (req, res) => {
+    FilesController.putPublish(req, res);
+  });
+  app.put('files/:id/unpublish', getUserFromToken, (req, res) => {
+    FilesController.putUnpublish(req, res);
+  });
   app.get('/files', (req, res) => {
     FilesController.getIndex(req, res);
   });

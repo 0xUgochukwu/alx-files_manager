@@ -32,12 +32,12 @@ class DBClient {
     return this.filesCollection.countDocuments();
   }
 
-  async findUser(email) {
-    return this.usersCollection.findOne(email);
+  async findUser(query) {
+    return this.usersCollection.findOne(query);
   }
 
-  async findFile(item) {
-    return this.filesCollection.findOne(item);
+  async findFile(query) {
+    return this.filesCollection.findOne(query);
   }
 
   async createUser(email, password) {
@@ -52,6 +52,14 @@ class DBClient {
   async createFile(data) {
     const result = await this.filesCollection.insertOne(data);
     return result.ops[0];
+  }
+
+  async updateUser(query, newFields) {
+    return this.usersCollection.updateOne(query, { $set: newFields });
+  }
+
+  async updateFile(query, newFields) {
+    return this.filesCollection.updateOne(query, { $set: newFields });
   }
 }
 
