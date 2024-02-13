@@ -64,13 +64,15 @@ export default class FilesController {
 
   static async getShow(request, response) {
     const { id } = request.params;
+    const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
+    if (!ObjectIdRegex.test(id)) { return response.status(404).json({ error: 'Not found' }); }
     const _id = new ObjectId(id);
     const file = await dbClient.findFile(_id);
-    if (request.user._id === file.userId) {
-      response.status(200).json(file);
-    } else {
-      response.status(404).json({ error: 'Not found' });
+    if (!file) { return response.status(404).json({ error: 'Not found' }); }
+    if (request.user._id.toString() === file.userId) {
+      return response.status(200).json(file);
     }
+    return response.status(404).json({ error: 'Not found' });
   }
 
   static async getIndex(request, response) {
