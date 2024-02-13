@@ -77,19 +77,19 @@ export default class FilesController {
     const _id = new ObjectId(request.params.id);
     const file = await dbClient.findFile(_id);
 
-    if (!file || request.user._id !== file.userId) {
+    if (!file || request.user._id.toString() !== file.userId.toString()) {
       return response.status(404).send({ error: 'Not found' });
     }
 
-    const updatedFile = await dbClient.updateFile({ _id }, { isPublic: true });
+    await dbClient.updateFile({ _id }, { isPublic: true });
 
     return response.status(200).send({
-      id: updatedFile._id.toString(),
-      userId: updatedFile.userId,
-      name: updatedFile.name,
-      type: updatedFile.type,
-      isPublic: updatedFile.isPublic,
-      parentId: updatedFile.parentId,
+      id: file._id.toString(),
+      userId: file.userId,
+      name: file.name,
+      type: file.type,
+      isPublic: true,
+      parentId: file.parentId,
     });
   }
 
@@ -97,19 +97,19 @@ export default class FilesController {
     const _id = new ObjectId(request.params.id);
     const file = await dbClient.findFile(_id);
 
-    if (!file || request.user._id !== file.userId) {
+    if (!file || request.user._id.toString() !== file.userId.toString()) {
       return response.status(404).send({ error: 'Not found' });
     }
 
-    const updatedFile = await dbClient.updateFile({ _id }, { isPublic: false });
+    await dbClient.updateFile({ _id }, { isPublic: false });
 
     return response.status(200).send({
-      id: updatedFile._id.toString(),
-      userId: updatedFile.userId,
-      name: updatedFile.name,
-      type: updatedFile.type,
-      isPublic: updatedFile.isPublic,
-      parentId: updatedFile.parentId,
+      id: file._id.toString(),
+      userId: file.userId,
+      name: file.name,
+      type: file.type,
+      isPublic: false,
+      parentId: file.parentId,
     });
   }
 }
