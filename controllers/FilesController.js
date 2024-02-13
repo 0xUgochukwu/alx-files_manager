@@ -3,7 +3,6 @@ import { v4 } from 'uuid';
 import fs from 'fs';
 
 import dbClient from '../utils/db';
-import redisClient from '../utils/redis';
 
 const VALID_TYPES = ['folder', 'file', 'image'];
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
@@ -92,7 +91,6 @@ export default class FilesController {
       isPublic: updatedFile.isPublic,
       parentId: updatedFile.parentId,
     });
-
   }
 
   static async putUnpublish(request, response) {
@@ -113,6 +111,5 @@ export default class FilesController {
       isPublic: updatedFile.isPublic,
       parentId: updatedFile.parentId,
     });
-
   }
 }
