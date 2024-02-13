@@ -28,7 +28,7 @@ export default class UsersController {
       const _id = new ObjectId(id);
       const user = await dbClient.findUser(_id);
       if (user) {
-        response.status(200).send({ id: user._id, email: user.email });
+        response.status(200).send({ id: user._id.toString(), email: user.email });
       } else {
         response.status(401).send({ error: 'Unauthorized' });
       }
