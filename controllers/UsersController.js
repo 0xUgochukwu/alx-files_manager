@@ -22,7 +22,7 @@ export default class UsersController {
   static async getMe(request, response) {
     response.status(200).send({
       email: request.user.email,
-      id: request.user._id.toString()
+      id: request.user._id.toString(),
     });
   }
 }
