@@ -6,6 +6,16 @@ import dbClient from '../utils/db';
 
 const VALID_TYPES = ['folder', 'file', 'image'];
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
+const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
+const fileExists = async (path) => {
+  try {
+    await fs.promises.access(path, fs.constants.F_OK);
+    return true;
+  } catch (error) {
+    if (error.code === 'ENOENT') { return false; }
+    throw error;
+  }
+};
 
 if (!fs.existsSync(FOLDER_PATH)) {
   fs.mkdirSync(FOLDER_PATH);
@@ -64,7 +74,6 @@ export default class FilesController {
 
   static async getShow(request, response) {
     const { id } = request.params;
-    const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
     if (!ObjectIdRegex.test(id)) { return response.status(404).json({ error: 'Not found' }); }
     const _id = new ObjectId(id);
     const file = await dbClient.findFile(_id);
@@ -101,6 +110,27 @@ export default class FilesController {
       });
     }
     return response.status(200).json(files);
+  }
+
+  static async getFile(request, response) {
+    const { id } = request.params;
+    if (!ObjectIdRegex.test(id)) { return response.status(404).json({ error: 'Not found' }); }
+    const _id = new ObjectId(id);
+    const file = await dbClient.findFile(_id);
+    if (file) {
+      if (!file.isPublic || request.user._id.toString() !== file.userId) {
+        return response.status(404).json({ error: 'Not found' });
+      } if (file.type === 'folder') {
+        return response.status(400).json({ error: "A folder doesn't have content" });
+      }
+      const path = file.localPath;
+      if (path) {
+        if (!(await fileExists(path))) {
+          return response.status(404).json({ error: 'Not found' });
+        }
+      }
+    }
+    return response.status(404).json({ error: 'Not found' });
   }
 
   static async putPublish(request, response) {

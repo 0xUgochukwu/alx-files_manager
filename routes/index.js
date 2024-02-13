@@ -35,6 +35,9 @@ export default function routes(app) {
   app.get('/files', getUserFromToken, (req, res) => {
     FilesController.getIndex(req, res);
   });
+  app.get('/files/:id/data', getUserFromToken, (req, res) => {
+      FilesController.getFile(req, res);
+  });
   app.post('/users', (req, res) => {
     UsersController.postNew(req, res);
   });
