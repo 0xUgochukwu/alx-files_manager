@@ -21,6 +21,7 @@ export default class AuthController {
           await redisClient.set(key, user._id.toString(), (24 * 60 * 60));
           return response.status(200).send({ token });
         }
+        return response.status(401).send({ error: 'Unauthorized' });
       }
     }
     return response.status(401).send({ error: 'Unauthorized' });
@@ -34,8 +35,9 @@ export default class AuthController {
       const user = await dbClient.findUser(_id);
       if (user) {
         await redisClient.del(`auth_${token}`);
-        return response.status(204).send();
+        return response.status(204);
       }
+      return response.status(401).send({ error: 'Unauthorized' });
     }
     return response.status(401).send({ error: 'Unauthorized' });
   }
