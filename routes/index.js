@@ -20,6 +20,9 @@ export default function routes(app) {
   app.get('/users/me', getUserFromToken, (req, res) => {
     UsersController.getMe(req, res);
   });
+  app.post('/files', getUserFromToken, (req, res) => {
+    FilesController.postUpload(req, res);
+  });
   app.get('/files/:id', (req, res) => {
     FilesController.getShow(req, res);
   });
