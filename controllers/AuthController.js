@@ -35,7 +35,7 @@ export default class AuthController {
       const user = await dbClient.findUser(_id);
       if (user) {
         await redisClient.del(`auth_${token}`);
-        return response.status(204);
+        return response.status(204).send();
       }
       return response.status(401).send({ error: 'Unauthorized' });
     }
