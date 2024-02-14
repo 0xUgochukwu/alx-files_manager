@@ -1,5 +1,5 @@
 import fs from 'fs';
-import mime from 'mime-types'
+import mime from 'mime-types';
 
 // Fonction pour vérifier si un fichier existe
 const fileExists = async (filePath) => {
@@ -10,9 +10,8 @@ const fileExists = async (filePath) => {
   } catch (error) {
     if (error.code === 'ENOENT') {
       return false; // Le fichier n'existe pas
-    } else {
-      throw error; // Une erreur inattendue s'est produite
     }
+    throw error; // Une erreur inattendue s'est produite
   }
 };
 
@@ -26,5 +25,5 @@ fileExists(filePath)
     console.error('Une erreur s\'est produite lors de la vérification du fichier:', error);
   });
 
-const mity = mime.lookup('hello.txt')
-console.log(mity)
+const mity = mime.lookup('hello.txt');
+console.log(mity);

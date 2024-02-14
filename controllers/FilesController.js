@@ -93,7 +93,8 @@ export default class FilesController {
   }
 
   static async getIndex(request, response) {
-    const parentId = Number(request.query.parentId) || 0;
+    let parentId = request.query.parentId || 0;
+    parentId = parentId === "0" ? Number(parentId) : parentId;
     const page = Number(request.query.page) || 0;
     const limit = Number(request.query.limit) || 20;
     const userId = request.user._id;
