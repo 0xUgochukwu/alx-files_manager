@@ -1,4 +1,5 @@
 import fs from 'fs';
+import mime from 'mime-types'
 
 // Fonction pour vérifier si un fichier existe
 const fileExists = async (filePath) => {
@@ -25,3 +26,5 @@ fileExists(filePath)
     console.error('Une erreur s\'est produite lors de la vérification du fichier:', error);
   });
 
+const mity = mime.lookup('hello.txt')
+console.log(mity)

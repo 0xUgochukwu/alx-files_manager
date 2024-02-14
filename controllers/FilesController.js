@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb';
 import { v4 } from 'uuid';
 import fs from 'fs';
+import mime from 'mime-types'
 
 import dbClient from '../utils/db';
 
@@ -129,6 +130,9 @@ export default class FilesController {
           return response.status(404).json({ error: 'Not found' });
         }
       }
+      const mineType = mine.lookup(file.name)
+      response.setHeader('Content-Type', mineType || 'text/plain; charset=utf-8')
+      const data = Buffer.from(file.data, 'base64').toString('utf8')
     }
     return response.status(404).json({ error: 'Not found' });
   }
