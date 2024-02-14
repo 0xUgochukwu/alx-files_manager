@@ -80,7 +80,15 @@ export default class FilesController {
     const file = await dbClient.findFile(_id);
     if (!file) { return response.status(404).json({ error: 'Not found' }); }
     if (request.user._id.toString() === file.userId.toString()) {
-      return response.status(200).json(file);
+      const fileData = {
+        id: file._id.toString(),
+        userId: file.userId.toString(),
+        name: file.name,
+        type: file.type,
+        isPublic: file.isPublic,
+        parentId: file.parentId,
+      };
+      return response.status(200).json(fileData);
     }
     return response.status(404).json({ error: 'Not found' });
   }
@@ -89,7 +97,7 @@ export default class FilesController {
     const parentId = request.query.parentId || 0;
     const page = Number(request.query.page) || 0;
     const limit = Number(request.query.limit) || 20;
-    const userId = new ObjectId(request.user._id);
+    const userId = request.user._id;
     const skip = (page) * limit;
 
     if (!request.user) { return response.status(401).json({ error: 'Unauthorized' }); }
