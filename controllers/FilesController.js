@@ -101,7 +101,7 @@ export default class FilesController {
       temp.forEach((doc) => {
         const file = {
           id: doc._id.toString(),
-          userId: doc.userId.toString(),
+          userId: doc.userId,
           name: doc.name,
           type: doc.type,
           isPublic: doc.isPublic,
