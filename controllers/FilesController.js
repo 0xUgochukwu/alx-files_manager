@@ -98,7 +98,7 @@ export default class FilesController {
     if (parentId === '0') parentId = 0;
     if (parentId !== 0) {
       try {
-        ObjectId(parentId);
+        parentId = new ObjectId(parentId);
       } catch (err) {
         return response.status(401).send({ error: 'Unauthorized' });
       }
@@ -106,7 +106,7 @@ export default class FilesController {
     let page = Number(request.query.page) || 0;
     if (Number.isNaN(page)) page = 0;
     const limit = Number(request.query.limit) || 20;
-    const userId = request.user._id;
+    const userId = new ObjectId(request.user._id);
     const skip = (page) * limit;
 
     if (!request.user) { return response.status(401).json({ error: 'Unauthorized' }); }
