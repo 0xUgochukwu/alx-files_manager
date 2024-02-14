@@ -3,6 +3,7 @@ import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import FilesController from '../controllers/FilesController';
 import getUserFromToken from '../middlewares/auth';
+import getUser from '../middlewares/userauth';
 
 export default function routes(app) {
   app.get('/status', (req, res) => {
@@ -35,7 +36,7 @@ export default function routes(app) {
   app.get('/files', getUserFromToken, (req, res) => {
     FilesController.getIndex(req, res);
   });
-  app.get('/files/:id/data', getUserFromToken, (req, res) => {
+  app.get('/files/:id/data', getUser, (req, res) => {
     FilesController.getFile(req, res);
   });
   app.post('/users', (req, res) => {
