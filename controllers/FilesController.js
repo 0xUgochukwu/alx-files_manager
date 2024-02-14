@@ -131,8 +131,8 @@ export default class FilesController {
       if (!file.isPublic && !(await getUser(request, response))) {
         return response.status(404).send({ error: 'Not found' });
       }
-      const userId = request.user._id.toString();
-      if (!file || (file.userId.toString() !== userId)) {
+      const userId = request.user?._id.toString();
+      if (!file || (!file.isPublic && file.userId.toString() !== userId)) {
         return response.status(404).json({ error: 'Not found' });
       } if (file.type === 'folder') {
         return response.status(400).json({ error: "A folder doesn't have content" });
