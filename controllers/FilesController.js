@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 import fs from 'fs';
 import mime from 'mime-types';
 import dbClient from '../utils/db';
+import { getUser } from '../middlewares/auth';
 
 const VALID_TYPES = ['folder', 'file', 'image'];
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
@@ -126,11 +127,12 @@ export default class FilesController {
     if (!ObjectIdRegex.test(id)) { return response.status(404).json({ error: 'Not found' }); }
     const _id = new ObjectId(id);
     const file = await dbClient.findFile(_id);
-    const userId = request.user._id.toString();
     if (file) {
-      if (!file || (!file.isPublic && (file.userId.toString() !== userId))) {
-        console.log(request.query.size);
-        console.log(file.isPublic);
+      if (!file.isPublic && !(await getUser(request, response))) {
+        return response.status(404).send({ error: 'Not found' });
+      }
+      const userId = request.user._id.toString();
+      if (!file || (file.userId.toString() !== userId)) {
         return response.status(404).json({ error: 'Not found' });
       } if (file.type === 'folder') {
         return response.status(400).json({ error: "A folder doesn't have content" });
