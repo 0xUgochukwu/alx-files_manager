@@ -23,7 +23,7 @@ export default function routes(app) {
   app.post('/files', getUserFromToken, (req, res) => {
     FilesController.postUpload(req, res);
   });
-  app.get('/files/:id', getUserFromToken,  (req, res) => {
+  app.get('/files/:id', getUserFromToken, (req, res) => {
     FilesController.getShow(req, res);
   });
   app.put('/files/:id/publish', getUserFromToken, (req, res) => {
@@ -36,7 +36,7 @@ export default function routes(app) {
     FilesController.getIndex(req, res);
   });
   app.get('/files/:id/data', getUserFromToken, (req, res) => {
-      FilesController.getFile(req, res);
+    FilesController.getFile(req, res);
   });
   app.post('/users', (req, res) => {
     UsersController.postNew(req, res);

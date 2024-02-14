@@ -41,7 +41,7 @@ class DBClient {
   }
 
   async findFiles(query, skip, limit) {
-    const piplines = [{ $match: query }, { $skip: skip }, { $limit: limit }]
+    const piplines = [{ $match: query }, { $skip: skip }, { $limit: limit }];
     return this.filesCollection.aggregate(piplines).toArray();
   }
 
