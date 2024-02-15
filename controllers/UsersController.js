@@ -1,4 +1,5 @@
 import dbClient from '../utils/db';
+import { userQueue } from '../worker';
 
 export default class UsersController {
   static async postNew(request, response) {
@@ -16,6 +17,7 @@ export default class UsersController {
     }
 
     user = await dbClient.createUser(email, password);
+    if (user) { userQueue.add({ userId: user._id }) }
     return response.status(201).send({ email: user.email, id: user._id.toString() });
   }
 
