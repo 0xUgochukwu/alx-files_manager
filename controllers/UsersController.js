@@ -17,7 +17,7 @@ export default class UsersController {
     }
 
     user = await dbClient.createUser(email, password);
-    if (user) { userQueue.add({ userId: user._id }) }
+    if (user) { userQueue.add({ userId: user._id }); }
     return response.status(201).send({ email: user.email, id: user._id.toString() });
   }
 

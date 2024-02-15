@@ -1,24 +1,24 @@
-import Queue from "bull/lib/queue";
-import imageThumbnail from "image-thumbnail";
+import Queue from 'bull/lib/queue';
+import imageThumbnail from 'image-thumbnail';
 import fs from 'fs';
 import { ObjectId } from 'mongodb';
 
-import dbClient from "./utils/db";
+import dbClient from './utils/db';
 
-export const fileQueue = new Queue("Thumbnail Generation");
-export const userQueue = new Queue("User Welcome email");
+export const fileQueue = new Queue('Thumbnail Generation');
+export const userQueue = new Queue('User Welcome email');
 
 fileQueue.process(async (job) => {
   const { fileId, userId } = job.data;
   if (!fileId) {
-    throw new Error("Missing fileId");
+    throw new Error('Missing fileId');
   }
   if (!userId) {
-    throw new Error("Missing userId");
+    throw new Error('Missing userId');
   }
   const file = await dbClient.findFile({ _id: ObjectId(fileId), userId: ObjectId(userId) });
   if (!file) {
-    throw new Error("File not found");
+    throw new Error('File not found');
   }
   const { localPath } = file;
 
@@ -30,15 +30,14 @@ fileQueue.process(async (job) => {
   });
 });
 
-
 userQueue.process(async (job) => {
   const { userId } = job.data;
   if (!userId) {
-    throw new Error("Missing userId");
+    throw new Error('Missing userId');
   }
   const user = await dbClient.findUser({ _id: ObjectId(userId) });
   if (!user) {
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
   console.log(`Welcome ${user.email}!`);
 });

@@ -62,7 +62,7 @@ export default class FilesController {
       const buffer = Buffer.from(data, 'base64');
       fs.writeFileSync(localPath, buffer);
       newFile = await dbClient.createFile({ ...newFile, localPath });
-      if (type === 'image') { fileQueue.add({ fileId: newFile._id, userId }) }
+      if (type === 'image') { fileQueue.add({ fileId: newFile._id, userId }); }
     }
 
     return response.status(201).send({
