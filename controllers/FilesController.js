@@ -4,6 +4,7 @@ import fs from 'fs';
 import mime from 'mime-types';
 import dbClient from '../utils/db';
 import { getUser } from '../middlewares/auth';
+import { fileQueue } from '../worker';
 
 const VALID_TYPES = ['folder', 'file', 'image'];
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
@@ -61,6 +62,7 @@ export default class FilesController {
       const buffer = Buffer.from(data, 'base64');
       fs.writeFileSync(localPath, buffer);
       newFile = await dbClient.createFile({ ...newFile, localPath });
+      if (type === 'image') { fileQueue.add({ fileId: newFile._id, userId }); }
     }
 
     return response.status(201).send({
@@ -145,7 +147,12 @@ export default class FilesController {
       } if (file.type === 'folder') {
         return response.status(400).json({ error: "A folder doesn't have content" });
       }
-      const path = file.localPath;
+      let path;
+      if (request.query.size) {
+        path = `${file.localPath}_${request.query.size}`;
+      } else {
+        path = file.localPath;
+      }
       if (path) {
         if (!(await fileExists(path))) {
           return response.status(404).json({ error: 'Not found' });
